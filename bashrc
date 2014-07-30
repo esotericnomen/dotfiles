@@ -5,6 +5,43 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+###############################################################################
+#
+#
+#		Raj defined functions
+#
+#
+###############################################################################
+radd() {
+    echo $1 >> "/home/shingu/workspace/word_list/gre_word_list/raj.txt"
+}
+gopen() {
+	google-chrome "https://www.google.co.in/search?q=define+$1" "https://www.google.co.in/search?q=thehindu.com +$1" "https://www.google.com/search?tbm=isch&q=$1" "https://en.wikipedia.org/w/index.php?search=$1" "http://www.merriam-webster.com/dictionary/$1"
+}
+rsearch() {
+    grep -rniw $1 ~/workspace/word_list/*
+}
+gchrome() {
+    google-chrome --allow-file-access-from-files &
+}
+rd() {
+    definition $1 vdh
+    gopen $1
+}
+rhelp() {
+    echo ""
+    echo "          Get Meaning         : rdefine"
+    echo "          Check presence      : rsearch"
+    echo "          Add word            : radd"
+    echo ""
+}
+
+
+
+
+
+
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -108,91 +145,9 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+export PATH=$PATH:/opt/adt-bundle-linux-x86-20131030/sdk/platform-tools/
+export PATH=$PATH:/opt/rpi/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/
 
-
-function mpy {
-  cd /media/python
-}
-
-function wos {
-  cd /media/python/workspace/
-}
-
-function sshos {
-  ssh madhusudancs@88.198.40.10
-}
-
-function sermel {
-  cd /media/python/workspace/melange
-  command=python
-  if [ -n $1 ]; then
-    command=$command$1
-  fi
-  `$command ./thirdparty/google_appengine/dev_appserver.py --use_sqlite --datastore_path=/media/python/melangedatafiles/devdata.sqlite --blobstore_path=/media/python/dev_appserver.blobstore --port=8000 --enable_sendmail --show_mail_body --allow_skipped_files --skip_sdk_update_check --default_partition "" --high_replication build`
-}
-
-function e {
-  gvim
-}
-
-function nme {
-  $@;
-  old_status=$?;
-  if [ $old_status -eq 0 ]; then
-    notify-send "Commands successfully executed!";
-  else
-    notify-send "Commands exited with status $old_status";
-  fi
-  return $old_status;
-}
-
-function g {
-  git $@;
-}
-
-function hyd {
-  export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-  export PATH=$PATH:/media/python/workspace/hyracks-read-only/hyracks/hyracks-server/target/hyracks-server-0.1.9-SNAPSHOT-binary-assembly/bin:/media/python/workspace/hyracks-read-only/hyracks/hyracks-cli/target/hyracks-cli-0.1.9-SNAPSHOT-binary-assembly/bin;
-  export JAVA_OPTS="-Xmx1024m";
-}
-
-function bhyr {
-  cd /media/python/hyracks-git
-  mvn package install -DskipTests=true
-}
-
-function bast {
-  cd /media/python/asterixdb-megamerge-git/asterix-dist/target/asterix-dist-0.0.4-SNAPSHOT-binary-assembly
-  ./stopasterix.sh
-  bhyr
-  cd /media/python/asterixdb-megamerge-git
-  mvn package -DskipTests=true
-  cd /media/python/asterixdb-megamerge-git/asterix-dist/target/asterix-dist-0.0.4-SNAPSHOT-binary-assembly
-  ./startasterix.sh 2
-  cd /media/python/asterixdb-megamerge-git
-}
-
-
-export PATH=$HOME/.local/bin:/var/lib/gems/1.9.1/bin:$HOME/installs/node/bin:/media/python/workspace/pl241-mcs:/media/python/yComp-1.3.16:$GOROOT/bin:/home/madhu/akmaxsat_1.1:$HOME/.rvm/bin:/media/python/llvmbuild/Debug+Asserts/bin:$PATH
-
-export EDITOR=vim
-
-# Ruby Vitual Machine
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-
-
-function parse_git_dirty {
-  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo " *"
-}
-
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
-}
-
-#export PS1='\[\e[1;32m\]\w\[\e[0m\]$(__git_ps1 " (\[\e[0;32m\]%s\[\e[0m\]\[\e[1;33m\]$(parse_git_dirty)\[\e[0m\])")\[\e[0;32m\]$\[\e[0m\] '
-
-# Core file limit
-ulimit -c 750000
-
-export GPGKEY=2E0C7000
+export LD_LIBRARY_PATH=/usr/local/lib
+export ARCH=arm 
+export CROSS_COMPILE=arm-linux-gnueabihf-

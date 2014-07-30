@@ -16,8 +16,8 @@ autocmd BufWinLeave *.c call matchdelete(w:m2)
 
 " highlight trailing whitespace and tabs after spaces in leading whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd BufWinEnter *.c match ExtraWhitespace /^\s* 	\|\s\+$/
-autocmd InsertEnter *.c match ExtraWhitespace /^\s* 	\|\s\+\%#\@<!$/
-autocmd InsertLeave *.c match ExtraWhitespace /^\s* 	\|\s\+$/
+autocmd BufWinEnter *.c match ExtraWhitespace /^\s*         \|\s\+$/
+autocmd InsertEnter *.c match ExtraWhitespace /^\s*         \|\s\+\%#\@<!$/
+autocmd InsertLeave *.c match ExtraWhitespace /^\s*         \|\s\+$/
 autocmd BufWinLeave *.c call clearmatches()
 
